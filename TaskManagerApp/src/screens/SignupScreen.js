@@ -3,7 +3,6 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
 import axios from 'axios';
 
-const API_URL = "http://192.168.1.6:5000"; // Replace with your local IP
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -40,7 +39,7 @@ const SignupScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/auth/signup`, {
+      const response = await axios.post(`${BASE_URL}/api/auth/signup`, {
         name,
         email,
         password,
