@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
 import axios from 'axios';
+import BASE_URL from '../../config';
 
 
 const SignupScreen = ({ navigation }) => {
