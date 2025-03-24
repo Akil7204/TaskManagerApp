@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
+const API_URL = "http://192.168.1.6:5000"; // Replace with your local IP
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     let newErrors = {};
@@ -26,11 +31,32 @@ const LoginScreen = ({ navigation }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = () => {
-    if (validate()) {
-      console.log("Login successful");
-      navigation.navigate("Home");
+  const handleLogin = async () => {
+    if (!validate()) return;
+
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password,
+      });
+      
+      const { token } = response.data;
+      await AsyncStorage.setItem("token", token);
+
+      Alert.alert("Success", "Login successful!");
+
+      // Reset navigation stack to prevent going back to login screen
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Home" }],
+      });
+
+    } catch (error) {
+      console.error("Login Error:", error);
+      Alert.alert("Login Failed", error.response?.data?.message || "Something went wrong. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
@@ -62,8 +88,14 @@ const LoginScreen = ({ navigation }) => {
         {errors.password}
       </HelperText>
 
-      <Button mode="contained" onPress={handleLogin} style={styles.button}>
-        Login
+      <Button
+        mode="contained"
+        onPress={handleLogin}
+        loading={loading}
+        disabled={loading}
+        style={styles.button}
+      >
+        {loading ? "Logging in..." : "Login"}
       </Button>
 
       <Button mode="text" onPress={() => navigation.navigate('Signup')} style={styles.link}>
@@ -78,22 +110,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#ffffff',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: "#333",
   },
   input: {
-    marginBottom: 5,
+    marginBottom: 10,
   },
   button: {
     marginTop: 10,
+    backgroundColor: "#007bff",
   },
   link: {
     marginTop: 15,
+    alignSelf: "center",
   },
 });
 

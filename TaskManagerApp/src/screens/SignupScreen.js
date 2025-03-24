@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
+import axios from 'axios';
+
+const API_URL = "http://192.168.1.6:5000"; // Replace with your local IP
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const validate = () => {
     let newErrors = {};
@@ -31,11 +35,23 @@ const SignupScreen = ({ navigation }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = () => {
-    if (validate()) {
-      console.log("Signup successful");
+  const handleSignup = async () => {
+    if (!validate()) return;
+
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/signup`, {
+        name,
+        email,
+        password,
+      });
+      console.log(response);
+      Alert.alert("Success", "Signup successful! Please log in.");
       navigation.navigate("Login");
+    } catch (error) {
+      Alert.alert("Signup Failed", error.response?.data?.message || "Something went wrong.");
     }
+    setLoading(false);
   };
 
   return (
@@ -79,8 +95,8 @@ const SignupScreen = ({ navigation }) => {
         {errors.password}
       </HelperText>
 
-      <Button mode="contained" onPress={handleSignup} style={styles.button}>
-        Signup
+      <Button mode="contained" onPress={handleSignup} loading={loading} disabled={loading} style={styles.button}>
+        {loading ? "Signing up..." : "Signup"}
       </Button>
 
       <Button mode="text" onPress={() => navigation.navigate('Login')} style={styles.link}>
