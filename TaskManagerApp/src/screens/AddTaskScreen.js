@@ -3,8 +3,8 @@ import { View, Text, TextInput, Alert, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Button, Card } from "react-native-paper";
+import BASE_URL from "../../config";
 
-const API_URL = "http://192.168.1.6:5000"; // Change this to your local IP
 
 const AddTaskScreen = ({ navigation }) => {
   const [title, setTitle] = useState("");
@@ -21,7 +21,7 @@ const AddTaskScreen = ({ navigation }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/api/tasks/`,
+        `${BASE_URL}/api/tasks/`,
         { title, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -3,8 +3,8 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import BASE_URL from '../../config';
 
-const API_URL = "http://192.168.1.6:5000"; // Replace with your local IP
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -36,7 +36,7 @@ const LoginScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
         email,
         password,
       });

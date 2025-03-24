@@ -3,8 +3,8 @@ import { View, Text, FlatList, Alert, RefreshControl } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Card, Button, FAB, ActivityIndicator } from "react-native-paper";
+import BASE_URL from "../../config";
 
-const API_URL = "http://192.168.1.6:5000"; // Replace with your system's local IP
 
 const HomeScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
@@ -15,7 +15,7 @@ const HomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const token = await AsyncStorage.getItem("token");
-      const response = await axios.get(`${API_URL}/api/tasks`, {
+      const response = await axios.get(`${BASE_URL}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(response.data);

@@ -3,8 +3,8 @@ import { View, Text, TextInput, Alert, ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Button, Card } from "react-native-paper";
+import BASE_URL from "../../config";
 
-const API_URL = "http://192.168.1.6:5000"; 
 
 const TaskDetailsScreen = ({ route, navigation }) => {
   const { taskId } = route.params;
@@ -18,7 +18,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
     const fetchTask = async () => {
       try {
         const token = await AsyncStorage.getItem("token");
-        const response = await axios.get(`${API_URL}/api/tasks/${taskId}`, {
+        const response = await axios.get(`${BASE_URL}/api/tasks/${taskId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -46,7 +46,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
     try {
       const token = await AsyncStorage.getItem("token");
       await axios.put(
-        `${API_URL}/api/tasks/${taskId}`,
+        `${BASE_URL}/api/tasks/${taskId}`,
         { title, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -72,7 +72,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
           onPress: async () => {
             try {
               const token = await AsyncStorage.getItem("token");
-              await axios.delete(`${API_URL}/api/tasks/${taskId}`, {
+              await axios.delete(`${BASE_URL}/api/tasks/${taskId}`, {
                 headers: { Authorization: `Bearer ${token}` },
               });
 
