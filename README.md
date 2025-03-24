@@ -113,7 +113,7 @@ Task Manager App is a full-stack mobile application built using React Native (Ex
 
 ### Frontend APK:
 
-- Download the APK for testing: [Expo Go APK Link](https://expo.dev/accounts/akil_aki/projects/TaskManagerApp/builds/e8756f13-38b1-4ecc-8f65-20b262a6ce7d)
+- Download the APK for testing: [Expo Go APK Link](https://expo.dev/accounts/akil_aki/projects/TaskManagerApp/builds/f2b259f1-85a8-46ea-981c-5fa59d6ab0df)
 
 ---
 
